@@ -15,14 +15,9 @@ namespace NumericalDistribution
         {
             var total = distribution.Buckets.Sum(x => x.Collection.Length);
             if (width < 400 || height < 200) throw new ArgumentException("resolution");
+            var bitmapRect = new Rectangle(0, 0, width, height);
             var bitmap = new Bitmap(width, height);
-            for (int i = 0; i < bitmap.Width; i++)
-            {
-                for (int j = 0; j < bitmap.Height; j++)
-                {
-                    bitmap.SetPixel(i, j, Color.Black);
-                }
-            }
+            FillArea(bitmap, bitmapRect, Color.Black);
             var leftBoxWidth = 60;
             var bottomBoxHeight = 50;
             var border = 1;
@@ -77,13 +72,8 @@ namespace NumericalDistribution
                 .Select(x => new { percentHigh = 1.0 - x * increment, pixelCoord = (int)(x * increment * drawbox.Height + drawbox.Top) })
                 .ToArray();
 
-            for (int j = drawbox.Top; j < drawbox.Bottom; j++)
-            {
-                for (int i = drawbox.Left; i < drawbox.Right; i++)
-                {
-                    bitmap.SetPixel(i, j, Color.White);
-                }
-            }
+            FillArea(bitmap, drawbox, Color.White);
+            
             var indent = 5;
             foreach (var segmentTop in lineCoords)
             {

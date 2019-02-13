@@ -16,6 +16,20 @@ namespace NumericalDistribution
             return renderer.RenderDistribution<T>(distribution, width, height);
         }
 
+        public static Distribution<double> ToDistribution(this double[] source, double minRange, double maxRange, int bins = 10)
+        {
+            var result = ToDistributionImpl(source, source, minRange, maxRange, bins);
+            return result;
+        }
+
+        public static Distribution<double> ToDistribution(this double[] source, int bins = 10)
+        {
+            var min = source.Min();
+            var max = source.Max();
+            var result = ToDistributionImpl(source, source, min, max, bins);
+            return result;
+        }
+
         public static Distribution<T> ToDistribution<T>(this T[] source, Func<T, double> keySelector, double minRange, double maxRange, int bins = 10)
         {
             var keys = source.Select(x => keySelector(x)).ToArray();
